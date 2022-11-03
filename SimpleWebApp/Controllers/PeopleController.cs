@@ -1,113 +1,121 @@
-﻿using SimpleWebApp.Models;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
+using SimpleWebApp.Models;
 
 namespace SimpleWebApp.Controllers
 {
-    public class PersonsStatus : Controller
+    public class PeopleController : Controller
     {
-        private MvcWebProjectEntities1 db = new MvcWebProjectEntities1();
+        private MvcWebProjectEntities2 db = new MvcWebProjectEntities2();
 
-        // GET: PersonsStatus
+        // GET: People
         public ActionResult Index()
         {
-            return View(db.PersonsStatus.ToList());
+            var people = db.People.Include(p => p.PersonStatu);
+            return View(people.ToList());
         }
 
-        // GET: PersonsStatus/Details/5
+        // GET: People/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonsStatu personsStatu = db.PersonsStatus.Find(id);
-            if (personsStatu == null)
+            Person person = db.People.Find(id);
+            if (person == null)
             {
                 return HttpNotFound();
             }
-            return View(personsStatu);
+            return View(person);
         }
 
-        // GET: PersonsStatus/Create
+        // GET: People/Create
         public ActionResult Create()
         {
+            ViewBag.Status = new SelectList(db.PersonStatus, "Id", "StatusName");
             return View();
         }
 
-        // POST: PersonsStatus/Create
+        // POST: People/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StatusName")] PersonsStatu personsStatu)
+        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,BirthDate,PhoneNumber,Adress,Status")] Person person)
         {
             if (ModelState.IsValid)
             {
-                db.PersonsStatus.Add(personsStatu);
+                db.People.Add(person);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(personsStatu);
+            ViewBag.Status = new SelectList(db.PersonStatus, "Id", "StatusName", person.Status);
+            return View(person);
         }
 
-        // GET: PersonsStatus/Edit/5
+        // GET: People/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonsStatu personsStatu = db.PersonsStatus.Find(id);
-            if (personsStatu == null)
+            Person person = db.People.Find(id);
+            if (person == null)
             {
                 return HttpNotFound();
             }
-            return View(personsStatu);
+            ViewBag.Status = new SelectList(db.PersonStatus, "Id", "StatusName", person.Status);
+            return View(person);
         }
 
-        // POST: PersonsStatus/Edit/5
+        // POST: People/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,StatusName")] PersonsStatu personsStatu)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,BirthDate,PhoneNumber,Adress,Status")] Person person)
         {
             if (ModelState.IsValid)
-            { //Next row was only = EntityState.Modified. Had to add that all ?
-                db.Entry(personsStatu).State = (System.Data.Entity.EntityState)System.Data.EntityState.Modified;
+            {
+                db.Entry(person).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(personsStatu);
+            ViewBag.Status = new SelectList(db.PersonStatus, "Id", "StatusName", person.Status);
+            return View(person);
         }
 
-        // GET: PersonsStatus/Delete/5
+        // GET: People/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonsStatu personsStatu = db.PersonsStatus.Find(id);
-            if (personsStatu == null)
+            Person person = db.People.Find(id);
+            if (person == null)
             {
                 return HttpNotFound();
             }
-            return View(personsStatu);
+            return View(person);
         }
 
-        // POST: PersonsStatus/Delete/5
+        // POST: People/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PersonsStatu personsStatu = db.PersonsStatus.Find(id);
-            db.PersonsStatus.Remove(personsStatu);
+            Person person = db.People.Find(id);
+            db.People.Remove(person);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
