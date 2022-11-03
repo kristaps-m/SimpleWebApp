@@ -12,19 +12,19 @@ namespace SimpleWebApp.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
-    public partial class MvcWebProjectEntities2 : DbContext
+
+    public partial class MvcWebProjectEntities2 : DbContext, IMvcWebProjectEntities2
     {
         public MvcWebProjectEntities2()
             : base("name=MvcWebProjectEntities2")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PersonStatu> PersonStatus { get; set; }
     }

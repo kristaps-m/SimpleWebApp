@@ -14,6 +14,13 @@ namespace SimpleWebApp.Controllers
     {
         private MvcWebProjectEntities2 db = new MvcWebProjectEntities2();
 
+        //private IMvcWebProjectEntities2 db;
+
+        //public PeopleController(IMvcWebProjectEntities2 mvcWebProjectEntities2)
+        //{
+        //    db = mvcWebProjectEntities2;
+        //}
+
         // GET: People
         public ActionResult Index()
         {
