@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleWebApp.Core\SimpleWebApp.Core.csproj" />
     <ProjectReference Include="..\SimpleWebApp\SimpleWebApp.csproj" />
   </ItemGroup>
 
